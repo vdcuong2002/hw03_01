@@ -163,7 +163,7 @@ int main(int number_of_input, char *command[])
 // ĐÓNG CÁC FILE SAU KHI SỬ DỤNG ///////////////////////////////////////////////////////////////////////////////////////////
     input.close();                                                  // Đóng file input
     output.close();                                                 // Đóng file output
-    return 0;                                                       // Kết thúc chương trình
+    system("pause");                                                // Kết thúc chương trình
 }
 
 // SOURCE HÀM CON /////////////////////////////////////////////////////////////////////////////////////////////////////////
