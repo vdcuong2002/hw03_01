@@ -55,7 +55,7 @@ int main(int number_of_input, char *command[])
         exit(0);                                                    // Exit nếu số lượng đối số sai
     }
 // CHECK FILE OUTPUT CÓ TỒN TẠI HAY KHÔNG //////////////////////////////////////////////////////////////////////////////
-    std::ifstream check(command[2]);                                // Mở thử file output,ở chế độ đọc
+    std::ifstream check(command[2]);                                // Mở thử file output ở chế độ đọc
     if (check.is_open())                                            // Nếu mở được thì chứng tỏ file đã tồn tại
     {
         std::cout << "Warning: FILENAME already exists. Do you wish to overwrite (y,n)? ";
@@ -145,7 +145,7 @@ int main(int number_of_input, char *command[])
                 std::string letter;                                 // Biến letter ở dạng string
                 letter.push_back(str[i]);                           // Chuyển đổi từ char về string
                 int num = letter2morse(letter);
-                if (num == -1 || num == Letters.size() - 1)                                      // Thông báo lỗi và bỏ qua ký tự này
+                if (num == -1 || num == Letters.size() - 1)         // Thông báo lỗi và bỏ qua ký tự này
                     std::cout << "Error: Unrecognised character " << letter << " on line " << count_line <<std::endl;
                 else output << Morses[num] + " ";                   // Chép ký tự đã chuyển đổi lên file output
             }
@@ -155,7 +155,7 @@ int main(int number_of_input, char *command[])
     }
 
 // THỦ TỤC TRÌNH BÀY ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    sleep (1);                                                      // Ngủ 0.5 giây làm màu 
+    sleep (1);                                                      // Ngủ 1 giây làm màu 
     std::cout << "--------------------" << std::endl;
     std::cout << "Convert done!" << std::endl;
     std::cout << "Open \"" << command[2] << "\" to see the result!" << std::endl;
@@ -187,12 +187,12 @@ int letter2morse(std::string letter)                                // Trả v�
 int morse2letter(std::string morse)                                 // Trả về số thứ tự của morse code trong vector bên trên
 {                                                                   // về cơ bản thì code giống phần bên trên
     int temp = -1;                                                  // Trả về -1 nếu không tồn tại ký tự giống
-    for (int i = 0; i < Morses.size(); i++)
+    for (int i = 0; i < Morses.size(); i++)                         // Duyệt từ đâu đến cuối vector Morse
     {
         if (morse == Morses[i])                                     // So sánh chuỗi trong C++
         {
-            temp = i;
-            break;
+            temp = i;                                               // Trả về kết quả là số thứ tự tương ứng
+            break;                                                  // Break luôn, giảm thời gian, và hạn chế lỗi chương trình
         }
     }
     return temp;
