@@ -21,11 +21,16 @@ Tại sao lại sử dụng C++: C++ hỗ trợ rất mạnh trong việc xử l
 #include <vector>                                                   // Xử lý vector
 #include <string>                                                   // Xử lý chuỗi
 #include <fstream>                                                  // Xử lý file
-#include <unistd.h>                                                 // Sử dụng hàm sleep(), tạo độ trễ khi xử lý cho chuyên nghiệp :v
-
+#include <unistd.h>                                                 // Sử dụng hàm sleep(), tạo trễ khi xử lý
+#include <windows.h>                                                // Xử lý các lệnh của cửa sổ Console
+// BẢNG MÀU CHO CONSOLE ////////////////////////////////////////////////////////////////////////////////////////////////
+#define RED         12                                              // Màu đỏ
+#define PURPLE      13                                              // Màu tím
+#define WHITE       7                                               // Màu xám 
 // CÁC HÀM CON /////////////////////////////////////////////////////////////////////////////////////////////////////////
 int letter2morse(std::string letter);                               // Chuyển đổi 1 ký tự sang mã morse
 int morse2letter(std::string morse);                                // Chuyển đổi 1 mã morse sang ký tự
+void printERROR();                                                  // Hàm in ra dòng chữ ERROR màu đỏ
 // BẢNG MÃ MORSE ////////////////////////////////////////////////////////////////////////////////////////////////////////
 std::vector<std::string>Morses {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---",
                    "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-",
@@ -51,14 +56,18 @@ int main(int number_of_input, char *command[])
 // KIỂM TRA SỐ LƯỢNG ĐỐI SỐ TRUYỂN VÀO TỪ COMMAND LINE /////////////////////////////////////////////////////////////////
     if (number_of_input != 3)
     {                                                               // Kiểm tra lượng đối số đã đủ chưa
-        (number_of_input < 3)? std::cout << "ERROR: not enough arguments! Please re-enter!" : std::cout << "ERROR: too many arguments! Please re-enter!" ;
+        printERROR();
+        (number_of_input < 3)? std::cout << "not enough arguments! Please re-enter!" : std::cout << "too many arguments! Please re-enter!" ;
         exit(0);                                                    // Exit nếu số lượng đối số sai
     }
 // CHECK FILE OUTPUT CÓ TỒN TẠI HAY KHÔNG //////////////////////////////////////////////////////////////////////////////
     std::ifstream check(command[2]);                                // Mở thử file output ở chế độ đọc
     if (check.is_open())                                            // Nếu mở được thì chứng tỏ file đã tồn tại
     {
-        std::cout << "Warning: FILENAME already exists. Do you wish to overwrite (y,n)? ";
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), PURPLE);
+        std::cout << "Warning: ";                                   // In phần chữ Warning màu tím
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+        std::cout << "\"" << command[2] << "\"" << " already exists. Do you wish to overwrite (y,n)? ";
         std::string s;                                              
         std::cin >> s;                                              // Đọc y/n
         if (s == "n")                                               // Nếu nhập vào "n", thì exit khỏi chương trình
@@ -71,12 +80,14 @@ int main(int number_of_input, char *command[])
     std::string str;                                                // str để đọc file
     if (!input.is_open())                                           // Nếu file không mở được thì thông báo lỗi
     {
-        std::cout << "ERROR: " << command[1] << " could not be opened!" << std::endl;
+        printERROR();
+        std::cout << "\"" << command[1] << "\" could not be opened!" << std::endl;
         exit(0);                                                    // Thoát chương trình nếu không mở được
     }
     if (!output.is_open())
     {
-        std::cout << "ERROR: " << command[2] << " could not be opened!" << std::endl;
+        printERROR();
+        std::cout << "\"" << command[2] << "\" could not be opened!" << std::endl;
         exit(0);                                                    // Thoát chương trình nếu không mở được
     }
     
@@ -97,10 +108,12 @@ int main(int number_of_input, char *command[])
     input.open(command[1]);                                         // Đóng mở file để di chuyển con trỏ lên đầu
 
     std::cout << "--------------------" << std::endl;               // Thủ tục trình bày
-    (type == 0) ? std::cout << "\"" << command[1] << "\" is a MORSE CODE file." << std::endl : std::cout << "\"" << command[1] << "\" is a TEXT file." << std::endl; 
-    std::cout << std::endl;
+    std::cout << "\"" << command[1] << "\" is a ";
+    (type == 0) ? std::cout << "MORSE CODE " : std::cout << "TEXT "; 
+    std::cout << "file!" << std::endl << std::endl;
     std::cout << "Please wait a minute . . ." << std::endl;
     std::cout << "--------------------" << std::endl;
+    sleep (1);                                                    // Ngủ 1 giây làm màu 
 // NẾU FILE LÀ MOURRSE FILE //////////////////////////////////////////////////////////////////////////////////////////////
     if (type == 0)
     {   
@@ -121,11 +134,12 @@ int main(int number_of_input, char *command[])
                         if (num == -1) 
                         {
                             output << "*";                          // Ký tự mã Morse không xác định, in ra thông báo lỗi
-                            std::cout << "ERROR: Invalid Morse CODE on line " << count_line << std::endl ;
+                            printERROR();                           // Xuất lỗi
+                            std::cout << "Invalid Morse " << this_vocub << " on line " << count_line << std::endl ;
                         }
                         else output << Letters[num];                // Khi gặp dấu " ", dừng việc ghi chuỗi, giải phóng ra file output 
                     }
-                this_vocub = "";
+                this_vocub = "";                                    // Reset lại chữ hiện tại
                 if (str[i] == '/') output << " ";                   // Với dấu "/" thì sẽ cách ra 1 khoảng trắc
                 }
             }
@@ -146,24 +160,25 @@ int main(int number_of_input, char *command[])
                 letter.push_back(str[i]);                           // Chuyển đổi từ char về string
                 int num = letter2morse(letter);
                 if (num == -1 || num == Letters.size() - 1)         // Thông báo lỗi và bỏ qua ký tự này
-                    std::cout << "Error: Unrecognised character " << letter << " on line " << count_line <<std::endl;
+                {
+                    printERROR();                                   // Xuất chữ ERROR màu đỏ
+                    std::cout << "Unrecognised character " << letter << " on line " << count_line <<std::endl;
+                }
                 else output << Morses[num] + " ";                   // Chép ký tự đã chuyển đổi lên file output
             }
             output << "\n";                                         // Xuống dòng sau mỗi lần getline
             count_line ++;                                          // Biến đêm tăng lên 1 đơn vị
         }
     }
-
 // THỦ TỤC TRÌNH BÀY ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    sleep (1);                                                      // Ngủ 1 giây làm màu 
     std::cout << "--------------------" << std::endl;
-    std::cout << "Convert done!" << std::endl;
+    std::cout << "Convert done!" << std::endl ;
     std::cout << "Open \"" << command[2] << "\" to see the result!" << std::endl;
 
 // ĐÓNG CÁC FILE SAU KHI SỬ DỤNG ///////////////////////////////////////////////////////////////////////////////////////////
     input.close();                                                  // Đóng file input
     output.close();                                                 // Đóng file output
-    system("pause");                                                // Kết thúc chương trình
+    system("pause");                                                // Kết thúc chương trình, nhấn để đóng
 }
 
 // SOURCE HÀM CON /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -198,4 +213,12 @@ int morse2letter(std::string morse)                                 // Trả v�
     return temp;
 }
 
+void printERROR()
+{
+    HANDLE hConsole;
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, RED);
+    std::cout << "ERROR: ";
+    SetConsoleTextAttribute(hConsole, WHITE);
+}
 // END -----------------------------------------------------------------------------------------------------------------
