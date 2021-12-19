@@ -213,12 +213,13 @@ int morse2letter(std::string morse)                                 // Trả v�
     return temp;
 }
 
-void printERROR()
+void printERROR()                                                   // Hàm in chữ ERROR với màu đỏ
+
 {
-    HANDLE hConsole;
+    HANDLE hConsole;                                                // Xuất chữ ERROR màu đỏ ra ngoài Console
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, RED);
-    std::cout << "ERROR: ";
-    SetConsoleTextAttribute(hConsole, WHITE);
+    SetConsoleTextAttribute(hConsole, RED);                         // Chỉnh màu console sang đỏ
+    std::cout << "ERROR: ";                                         // In
+    SetConsoleTextAttribute(hConsole, WHITE);                       // Chỉnh màu console sang trắng, reset lại màu console
 }
 // END -----------------------------------------------------------------------------------------------------------------
