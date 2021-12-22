@@ -16,12 +16,12 @@ Cách giải:
                 chỉ số của mã morse thì nó cũng chính là chỉ số của chữ cái trong vector chữ cái. Vậy việc chuyển đổi 
                 thì sẽ rất đơn giản
 Tại sao lại sử dụng C++: C++ hỗ trợ rất mạnh trong việc xử lý chuỗi, cộng chuỗi, so sánh chuỗi bằng thư viện <string>
+Trong chương trình, có sử dụng một số hàm sleep, tổng thời gian sleep là 1.8 giây
 */
 #include <iostream>                                                 // Vào ra cơ bản
 #include <vector>                                                   // Xử lý vector
 #include <string>                                                   // Xử lý chuỗi
 #include <fstream>                                                  // Xử lý file
-#include <unistd.h>                                                 // Sử dụng hàm sleep(), tạo trễ khi xử lý
 #include <windows.h>                                                // Xử lý các lệnh của cửa sổ Console
 // BẢNG MÀU CHO CONSOLE ////////////////////////////////////////////////////////////////////////////////////////////////
 #define RED         12                                              // Màu đỏ
@@ -99,7 +99,7 @@ int main(int number_of_input, char *command[])
         {
             if (str[i] != '-' && str[i] != '.' && str[i] != '/' && str[i] != ' ')
                 type = 1;                                           // Gặp ký tự khác những ký tự mose thì sẽ cho type  = 1
-                break;
+                break;                                              // Break vòng for để tránh lãng phí thời gian
         }
     }
 
@@ -108,12 +108,21 @@ int main(int number_of_input, char *command[])
     input.open(command[1]);                                         // Đóng mở file để di chuyển con trỏ lên đầu
 
     std::cout << "--------------------" << std::endl;               // Thủ tục trình bày
-    std::cout << "\"" << command[1] << "\" is a ";
+    std::cout << (char)175 << " \"" << command[1] << "\" is a ";
     (type == 0) ? std::cout << "MORSE CODE " : std::cout << "TEXT "; 
     std::cout << "file!" << std::endl << std::endl;
-    std::cout << "Please wait a minute . . ." << std::endl;
-    std::cout << "--------------------" << std::endl;
-    sleep (1);                                                    // Ngủ 1 giây làm màu 
+    std::cout << (char)175 << " Please wait a minute . . ." << std::endl << std::endl;
+    for (int i = 0; i <= 30; i++)                                   // Tạo một bar loading 
+        std::cout << (char)176;                                     // Mã ASCII 176, tạo bar
+    std::cout << "\r";                                              // Lùi về đầu dòng
+    for (int i = 0; i <= 30; i++)                                   // Bắt đầu chạy loading
+    {
+        std::cout << (char)219;                                     // ASCII 219 là ô vuông tô kín
+        Sleep(33.3);                                                // Delay 1000/30 giây                       
+    }
+    Sleep(400);                                                     
+    std::cout << "\t" << (char)175 << " Convert done!" << std::endl << std::endl;
+    Sleep(400);                                                     // Tổng thời gian sleep, 1.8 giây
 // NẾU FILE LÀ MOURRSE FILE //////////////////////////////////////////////////////////////////////////////////////////////
     if (type == 0)
     {   
@@ -172,12 +181,12 @@ int main(int number_of_input, char *command[])
     }
 // THỦ TỤC TRÌNH BÀY ////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::cout << "--------------------" << std::endl;
-    std::cout << "Convert done!" << std::endl ;
-    std::cout << "Open \"" << command[2] << "\" to see the result!" << std::endl;
+    std::cout << (char)175 << " Open \"" << command[2] << "\" to see the result!" << std::endl;
 
 // ĐÓNG CÁC FILE SAU KHI SỬ DỤNG ///////////////////////////////////////////////////////////////////////////////////////////
     input.close();                                                  // Đóng file input
     output.close();                                                 // Đóng file output
+    std::cout << (char)175 << " ";                                      
     system("pause");                                                // Kết thúc chương trình, nhấn để đóng
 }
 
