@@ -188,6 +188,7 @@ int main(int number_of_input, char *command[])
     output.close();                                                 // Đóng file output
     std::cout << (char)175 << " ";                                      
     system("pause");                                                // Kết thúc chương trình, nhấn để đóng
+    system(command[2]);                                             // Mở file txt
 }
 
 // SOURCE HÀM CON /////////////////////////////////////////////////////////////////////////////////////////////////////////
