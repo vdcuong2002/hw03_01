@@ -1,5 +1,5 @@
 /*
-Cách giải: 
+Cách giải, thuật toán: 
     Khi nhập input, kiếm tra xem input là loại file gì, file morse hay text
     Nếu là morse, chuyển từ morse sang text. 
     Cách làm: Đọc file theo từng dòng, trong từng dòng đó ta sẽ cho một biến chạy từ đầu dòng tới cuối dòng
@@ -17,6 +17,7 @@ Cách giải:
                 thì sẽ rất đơn giản
 Tại sao lại sử dụng C++: C++ hỗ trợ rất mạnh trong việc xử lý chuỗi, cộng chuỗi, so sánh chuỗi bằng thư viện <string>
 Trong chương trình, có sử dụng một số hàm sleep, tổng thời gian sleep là 1.8 giây
+Phần chương trình in ra chữ màu đỏ, tím tham khảo tại: https://stackoverflow.com/questions/25559077/how-to-get-background-color-back-to-previous-color-after-use-of-std-handle
 */
 #include <iostream>                                                 // Vào ra cơ bản
 #include <vector>                                                   // Xử lý vector
@@ -51,7 +52,7 @@ std::vector<std::string>Letters {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j
         // được chữ/số trùng thì phải out ra luôn, không được duyệt tiếp kẻo gặp phải sai sót
         // KHI MỞ RỘNG THÊM MÃ, PHẢI LƯU Ý, CHỈNH SỬA LẠI HÀM "letter2morse()", NẾU KHÔNG, CÓ THỂ SẼ BỊ GẶP LỖI
 // HÀM MAIN /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int main(int number_of_input, char *command[])
+int main(int number_of_input, char *command[])                      // Command line
 {
 // KIỂM TRA SỐ LƯỢNG ĐỐI SỐ TRUYỂN VÀO TỪ COMMAND LINE /////////////////////////////////////////////////////////////////
     if (number_of_input != 3)
@@ -207,7 +208,7 @@ int letter2morse(std::string letter)                                // Trả v�
             break;                                                  // Nếu tìm được thì break ra khỏi vòng for để tiết kiệm thời gian
         }
     }
-    return temp;
+    return temp;                                                    // Trả về kết quả
 }
 
 int morse2letter(std::string morse)                                 // Trả về số thứ tự của morse code trong vector bên trên
@@ -221,12 +222,12 @@ int morse2letter(std::string morse)                                 // Trả v�
             break;                                                  // Break luôn, giảm thời gian, và hạn chế lỗi chương trình
         }
     }
-    return temp;
+    return temp;                                                    // Trả về kết quả
 }
 
 void printERROR()                                                   // Hàm in chữ ERROR với màu đỏ
 {
-    HANDLE hConsole;                                                // Xuất chữ ERROR màu đỏ ra ngoài Console
+    HANDLE hConsole;                                                // Đoạn này em đi nhặt code trên mạng
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, RED);                         // Chỉnh màu console sang đỏ
     std::cout << "ERROR: ";                                         // In
