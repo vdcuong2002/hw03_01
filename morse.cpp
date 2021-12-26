@@ -123,12 +123,13 @@ int main(int number_of_input, char *command[])
     Sleep(400);                                                     
     std::cout << "\t" << (char)175 << " Convert done!" << std::endl << std::endl;
     Sleep(400);                                                     // Tổng thời gian sleep, 1.8 giây
-// NẾU FILE LÀ MOURRSE FILE //////////////////////////////////////////////////////////////////////////////////////////////
+// NẾU FILE LÀ MOURSE FILE, CẦN CHUYỂN THÀNH TEXT ///////////////////////////////////////////////////////////////////////////
     if (type == 0)
     {   
         int count_line = 1;                                         // Biến đếm dòng   
         while (getline(input, str))                                 // Tách line
-        {      
+        {
+            str = str + " ";                                        // Xử lý trước khi tính toán để tránh lỗi, lỗi này phát sinh trong quá trình test  
             std::string this_vocub = "";                            // Chữ hiện tại để duyệt, sau mỗi lần xuất sẽ reset lại
             for (int i = 0; i < str.length(); i++)
             {
@@ -157,7 +158,7 @@ int main(int number_of_input, char *command[])
         }
     }
 
-// NẾU FILE LÀ TEXT FILE  //////////////////////////////////////////////////////////////////////////////////////////////////
+// NẾU FILE LÀ TEXT FILE, CẦN CHUYỂN THÀNH MORSE  ////////////////////////////////////////////////////////////////////////////
     if (type == 1)
     {
         int count_line = 1;    
@@ -188,7 +189,7 @@ int main(int number_of_input, char *command[])
     output.close();                                                 // Đóng file output
     std::cout << (char)175 << " ";                                      
     system("pause");                                                // Kết thúc chương trình, nhấn để đóng
-    system(command[2]);                                             // Mở file txt
+//    system(command[2]);                                             // Mở file txt
 }
 
 // SOURCE HÀM CON /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -224,7 +225,6 @@ int morse2letter(std::string morse)                                 // Trả v�
 }
 
 void printERROR()                                                   // Hàm in chữ ERROR với màu đỏ
-
 {
     HANDLE hConsole;                                                // Xuất chữ ERROR màu đỏ ra ngoài Console
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
